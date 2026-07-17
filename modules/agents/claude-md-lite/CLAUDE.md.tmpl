@@ -1,0 +1,64 @@
+# {{project}} — Claude / coding-assistant context
+
+## Overview
+
+{{description}}
+
+## Project map
+
+```
+src/           # Primary source
+tests/         # Integration tests (if present)
+scripts/       # Local gates (check.sh)
+docs/          # Design notes
+```
+
+## Development commands
+
+```bash
+# Local gate (preferred)
+./scripts/check.sh
+
+# Fix formatting
+./scripts/check.sh --fix
+
+# Quick (skip full build when supported)
+./scripts/check.sh --quick
+```
+
+### Rust
+
+```bash
+cargo check
+cargo test
+cargo clippy --all-targets -- -D warnings
+cargo fmt --check
+```
+
+### Python
+
+```bash
+uv sync
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest -q
+```
+
+## Coding standards
+
+- Prefer small, reviewable diffs
+- No secrets in commits or logs
+- Run local gates before claiming work complete
+- Do **not** enable automatic Copilot code review on PRs
+
+## PR hygiene
+
+- Feature branch → `dev` (use `Refs #n` only)
+- `dev` → `main` delivery (use `Closes #n` / `Fixes #n`)
+- See `AGENTS.md` if present for fuller agent rules
+
+## Further reading
+
+- README.md
+- docs/FLEET_STANDARDS.md (if present)
+- AGENTS.md (agent orchestration rules)

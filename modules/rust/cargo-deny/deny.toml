@@ -1,0 +1,29 @@
+# cargo-deny template (tz-forge modules/rust/cargo-deny)
+# Install: cargo install cargo-deny
+# Run: cargo deny check
+
+[advisories]
+ignore = []
+
+[licenses]
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "0BSD",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+]
+confidence-threshold = 0.8
+
+[bans]
+multiple-versions = "warn"
+wildcards = "allow"
+allow = []
+deny = []
+
+[sources]
+unknown-registry = "warn"
+unknown-git = "warn"

@@ -1,0 +1,42 @@
+# AGENTS.md — {{project}}
+
+Short house rules for AI coding assistants working in this repo.
+
+## Local checks
+
+Run before considering work complete:
+
+```bash
+./scripts/check.sh          # or language-equivalent local gate
+```
+
+If `scripts/check.sh` is missing, use standard commands for the stack
+(`cargo test`, `uv run pytest`, `ruff`, etc.).
+
+## PR flow (protect main / dev)
+
+1. Create a feature or chore branch (never commit directly to `main`)
+2. Make changes; keep diffs small
+3. Open PR → **`dev`** first (when the repo uses a dev trunk)
+4. Promote `dev` → `main` when ready for release
+
+### Issue linking tiers
+
+| Target branch | Issue keywords |
+|---------------|----------------|
+| `dev` / feature | **`Refs #n`** / `Related to #n` only — issues stay open |
+| `main` | **`Closes #n`** / **`Fixes #n`** for completed work |
+
+Epics close only when the delivery PR to `main` includes `Closes #<epic>`.
+
+## Safety
+
+- No secrets, tokens, or credentials in commits, logs, or issue bodies
+- Do **not** request automatic Copilot code review
+- Prefer cited evidence over assumptions when a corpus index (Tero) is available
+
+## Further reading
+
+- README.md
+- docs/FLEET_STANDARDS.md (if present)
+- CLAUDE.md (build/test map)

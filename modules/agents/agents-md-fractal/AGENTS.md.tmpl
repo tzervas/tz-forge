@@ -1,0 +1,129 @@
+# AGENTS.md — {{project}} (fractal swarm)
+
+Operator-style agent rules for solo AI **and** multi-agent L0/L1 waves.
+Distilled from cabal-devmelopner house style — product-specific paths removed.
+
+## Tero-first (corpus memory)
+
+When a Tero / Layer-1 index is available, **query it before large greps**.
+
+Prefer:
+
+1. `text_search` / `query_by_id` / `query_by_kind` via the `tero` MCP server
+2. Open the **cited file:line** — hits are pointers, not ground truth
+3. On refusal (`kind: refusal` / no citable match), rephrase or fall back to repo search
+
+### Cold start (no `tero__*` tools)
+
+Sessions only pick up MCP servers registered before launch. Register Tero, then
+`/mcps` → `r` or start a new session. See sibling `tero-mcp` and your index path.
+
+Token default for local work: `local-dev` (or whatever matches `TERO_TOKENS`).
+
+## Subagents and multi-repo excavation
+
+Orchestrator **and** leaf subagents should excavate with Tero first, then verify
+against local trees.
+
+**Orchestrator checklist when spawning investigation agents:**
+
+1. Confirm `tero__identify` (or `search_tool` → `tero__*`) works
+2. Paste an explicit **Tero excavation block** into every subagent prompt
+3. Prefer leaf prompts that name **ids to chase** when known
+4. After leaves return, `cross_ref` / `query_by_id` on new ids the leaves surfaced
+
+**Paste into each investigation subagent prompt:**
+
+```text
+## Tero excavation (do this before deep filesystem greps)
+
+You have access to the `tero` MCP server (tools `tero__*`). Use it to excavate
+project memory related to your target. Token: "local-dev" (or env TERO_TOKEN).
+
+1. search_tool query="tero" once if needed to refresh schemas.
+2. tero__identify { "token": "local-dev" } — confirm index is live.
+3. tero__text_search { "value": "<target + keywords>", "token": "local-dev" }
+4. For each strong hit with an id: tero__query_by_id
+5. tero__cross_ref { "start": "<id>", "depth": "2", "token": "local-dev" } when mapping programs
+6. Open cited file:line paths — summaries are not ground truth.
+7. Only then dig the local checkout (branches, README, src, tests).
+
+If tero__* tools are missing: note "Tero unavailable" and fall back to repo search;
+tell the orchestrator to fix MCP registration for the next wave.
+```
+
+## Model policy (L0 / L1)
+
+See **docs/MODEL_POLICY.md** (or the snippet installed with this profile):
+
+| Role | Model class | Use for |
+|------|-------------|---------|
+| **L0** | Frontier (hard architecture, naming, design forks) | Rare; only when L0 is named |
+| **L1** | Composer / fast implementer (default) | Code, docs, extraction, PRs |
+
+- **No automatic Copilot code review** (fleet-wide)
+- Copilot instructions file is opt-in only; reviews stay off
+
+## Local checks
+
+```bash
+./scripts/check.sh
+./scripts/check.sh --fix    # apply formatters when supported
+./scripts/check.sh --quick   # faster path when supported
+```
+
+Run gates before claiming complete. Prefer small, reviewable diffs.
+
+## Branch / worktree guards
+
+- Never commit directly to `main` (or protected `dev` without a PR)
+- Create feature / chore / fix branches from the correct base
+- Prefer one worktree per concurrent wave when using multi-agent orchestration
+- Append-only for living docs (`AGENTS.md`, kickoffs, ROADMAP status sections)
+
+## PR tiers — Refs vs Closes
+
+| Target | Keywords | Effect |
+|--------|----------|--------|
+| Feature → `dev` | **`Refs #n`**, `Related to #n` | Issues stay open |
+| Delivery → `main` | **`Closes #n`**, **`Fixes #n`** | Issues close on merge |
+| Epic | `Closes #<epic>` only on full main delivery | Partial work uses Refs |
+
+Fleet workflows:
+
+- `close-issues-on-main.yml` — closes linked issues when PR lands on **main**
+- `reopen-issues-closed-off-main.yml` — reopens if `Closes` was used off-main
+
+Do **not** request automatic Copilot review on PRs.
+
+## Skills
+
+Generic skills live under `skills/<id>/SKILL.md` when installed by tz-forge:
+
+- `commit-prep` — format, lint, test, commit message
+- `pr-review` — two-pass PR review
+- `fleet-gap` — fleet standards drift
+- `cargo-check` — Rust local gate
+- `unsafe-review` — SAFETY comments on `unsafe` blocks
+
+Kickoffs: `.claude/kickoffs/` (see README there).
+
+## Harness / cabal pointers
+
+- **agent-harness** — multi-agent offline dry-run / wave orchestration (compose by ref)
+- **cabal-devmelopner** — operator CLI/TUI; profile presets for L0/L1 waves
+- Pin versions in your workspace docs; do not vendor full binaries into every product repo
+
+## Hygiene
+
+- No secrets in commits, CI logs, or issue/PR bodies
+- Update this file + kickoffs after material process changes (append-only sections)
+- Honesty gate: never silent on tool/MCP failure — surface errors explicitly
+
+## Further reading
+
+- README.md
+- CLAUDE.md
+- docs/FLEET_STANDARDS.md
+- docs/MODEL_POLICY.md
+- docs/ASSISTANT_PROFILES.md (in tz-forge meta)

@@ -1,0 +1,19 @@
+kind: meta
+name: tz-forge
+assistant:
+  profile: fractal-swarm
+  tools:
+    claude: false
+    agents_md: false
+    skills: []
+    cursor: false
+    copilot_instructions: false
+    tero: true
+    harness: true
+    cabal: true
+modules:
+  fleet: { version: "1" }
+  license-mit: { version: "1" }
+options:
+  default_branch: main
+  use_dev_branch: true

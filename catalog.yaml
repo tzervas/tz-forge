@@ -1,0 +1,142 @@
+# tz-forge catalog — composable modules, project kinds, assistant profiles
+# Design: plans/fractal/P27_DEVTOOLING_TEMPLATES.md
+# AI surface: plans/evidence/P27-devtooling/AI_ASSISTANT_COMPOSABLE.md
+# Inventory: plans/evidence/P27-devtooling/EXTRACT_CANDIDATES.md
+
+version: 1
+name: tz-forge
+
+assistant_profiles:
+  humans-only:
+    description: Fleet + license + pre-commit only — no CLAUDE/AGENTS/skills
+    human: true
+    solo_ai: false
+    fractal_swarm: false
+  solo-ai:
+    description: + CLAUDE.md lite + AGENTS.md lite
+    human: true
+    solo_ai: true
+    fractal_swarm: false
+  solo-ai-rich:
+    description: + skills pack + kickoffs
+    human: true
+    solo_ai: true
+    fractal_swarm: false
+  fractal-swarm:
+    description: Fractal AGENTS + multi-skills + kickoffs + model policy
+    human: true
+    solo_ai: true
+    fractal_swarm: true
+
+modules:
+  fleet:
+    path: modules/fleet
+    description: P26 fleet pack — workflows, issue close, templates, badges, FLEET_STANDARDS
+    applies: [all]
+    extract_candidate: fleet-pack-p26
+
+  license-mit:
+    path: modules/license/mit
+    description: MIT LICENSE + REUSE.toml fragment
+    applies: [all]
+    extract_candidate: contributing-md  # adjacent license/reuse work (P24)
+
+  pre-commit:
+    path: modules/pre-commit
+    description: Default .pre-commit-config.yaml (gitleaks + trailing whitespace)
+    applies: [all]
+    extract_candidate: pre-commit-default
+    install:
+      - { src: .pre-commit-config.yaml, dest: .pre-commit-config.yaml }
+
+  local-ci-rust:
+    path: modules/local-ci/rust
+    description: scripts/check.sh for Rust (fmt, clippy -D warnings, build, test)
+    applies: [rust-lib, rust-cli, hybrid-rust-python]
+    extract_candidate: local-check-sh-rust
+    install:
+      - { src: check.sh, dest: scripts/check.sh, mode: "0755" }
+
+  rust-cargo-deny:
+    path: modules/rust/cargo-deny
+    description: Sample deny.toml (MIT/Apache/BSD/ISC/Zlib/Unicode-3.0)
+    applies: [rust-lib, rust-cli, hybrid-rust-python]
+    extract_candidate: cargo-deny-toml
+    install:
+      - { src: deny.toml, dest: deny.toml }
+
+  agents-md-lite:
+    path: modules/agents/agents-md-lite
+    description: Short AGENTS.md — checks, PR tiers, no secrets
+    profiles: [solo-ai, solo-ai-rich]
+    extract_candidate: agents-md-tero
+    install:
+      - { src: AGENTS.md.tmpl, dest: AGENTS.md, template: true }
+
+  agents-md-fractal:
+    path: modules/agents/agents-md-fractal
+    description: Tero-first, subagents, Refs vs Closes, model policy pointer
+    profiles: [fractal-swarm]
+    extract_candidate: agents-md-tero
+    install:
+      - { src: AGENTS.md.tmpl, dest: AGENTS.md, template: true }
+
+  claude-md-lite:
+    path: modules/agents/claude-md-lite
+    description: CLAUDE.md skeleton — build/test commands, project map
+    profiles: [solo-ai, solo-ai-rich, fractal-swarm]
+    extract_candidate: claude-md-agent-rules
+    install:
+      - { src: CLAUDE.md.tmpl, dest: CLAUDE.md, template: true }
+
+  skills-generic:
+    path: modules/agents/skills-generic
+    description: Generic SKILL.md pack (commit-prep, pr-review, fleet-gap, unsafe-review, cargo-check)
+    profiles: [solo-ai-rich, fractal-swarm]
+    install_dir:
+      src: .
+      dest: skills
+
+  kickoffs:
+    path: modules/agents/kickoffs
+    description: .claude/kickoffs README + wave conventions
+    profiles: [solo-ai-rich, fractal-swarm]
+    install:
+      - { src: README.md, dest: .claude/kickoffs/README.md }
+
+  model-policy:
+    path: modules/agents
+    description: L0 frontier / L1 composer; no Copilot auto-review
+    profiles: [fractal-swarm]
+    install:
+      - { src: model-policy.md, dest: docs/MODEL_POLICY.md }
+
+project_kinds:
+  rust-lib:
+    description: Library crate + tests + fleet
+    path: project-kinds/rust-lib.yaml
+    default_assistant: solo-ai
+    modules: [fleet, license-mit, pre-commit, local-ci-rust, rust-cargo-deny]
+
+  python-mcp:
+    description: Python MCP server + fleet
+    path: project-kinds/python-mcp.yaml
+    default_assistant: solo-ai
+    modules: [fleet, license-mit, pre-commit]
+
+  agent-swarm:
+    description: Multi-agent swarm workspace
+    path: project-kinds/agent-swarm.yaml
+    default_assistant: fractal-swarm
+    modules: [fleet, license-mit, pre-commit]
+
+# Top extract candidates tracked for future modules (P27c+)
+extract_backlog:
+  - gitignore-language
+  - ci-workflow-manual-local-first
+  - release-workflow-manual
+  - gitleaks-config
+  - dependabot-cargo-gha
+  - devcontainer-json
+  - codeowners-default
+  - rust-toolchain-toml

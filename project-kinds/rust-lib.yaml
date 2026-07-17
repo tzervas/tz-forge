@@ -1,0 +1,29 @@
+# Project kind: Rust library crate
+id: rust-lib
+description: Library crate + tests + fleet CI + cargo-deny + optional AI profiles
+default_assistant: solo-ai
+
+modules:
+  always:
+    - fleet
+    - license-mit
+    - pre-commit
+    - local-ci-rust
+    - rust-cargo-deny
+
+assistant_profiles:
+  humans-only: []
+  solo-ai:
+    - agents-md-lite
+    - claude-md-lite
+  solo-ai-rich:
+    - agents-md-lite
+    - claude-md-lite
+    - skills-generic
+    - kickoffs
+  fractal-swarm:
+    - agents-md-fractal
+    - claude-md-lite
+    - skills-generic
+    - kickoffs
+    - model-policy

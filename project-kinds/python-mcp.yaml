@@ -1,0 +1,27 @@
+# Project kind: Python MCP server
+id: python-mcp
+description: Python MCP / uv project + fleet CI + pre-commit + optional AI profiles
+default_assistant: solo-ai
+
+modules:
+  always:
+    - fleet
+    - license-mit
+    - pre-commit
+
+assistant_profiles:
+  humans-only: []
+  solo-ai:
+    - agents-md-lite
+    - claude-md-lite
+  solo-ai-rich:
+    - agents-md-lite
+    - claude-md-lite
+    - skills-generic
+    - kickoffs
+  fractal-swarm:
+    - agents-md-fractal
+    - claude-md-lite
+    - skills-generic
+    - kickoffs
+    - model-policy
