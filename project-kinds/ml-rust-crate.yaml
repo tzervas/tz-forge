@@ -1,17 +1,20 @@
-# Project kind: Python MCP server
-id: python-mcp
-description: Python MCP / uv project + fleet CI + pre-commit + optional AI profiles
-default_assistant: solo-ai
-skeleton: modules/skeletons/python-mcp
+# Project kind: ML training/inference Rust crate
+id: ml-rust-crate
+description: ML Rust crate (BitNet/trit/VSA/PEFT-style) + fleet + fractal defaults
+default_assistant: fractal-swarm
+skeleton: modules/skeletons/ml-rust-crate
 
 modules:
   always:
     - fleet
     - license-mit
     - pre-commit
-    - local-ci-python
-    - gitignore-python
-    - dependabot-python
+    - local-ci-rust
+    - rust-cargo-deny
+    - rust-toolchain
+    - gitignore-rust
+    - gitignore-ml
+    - dependabot-cargo
     - gitleaks-config
     - skeleton
 
@@ -24,11 +27,13 @@ assistant_profiles:
     - agents-md-lite
     - claude-md-lite
     - skills-generic
+    - skills-ml
     - kickoffs
   fractal-swarm:
     - agents-md-fractal
     - claude-md-lite
     - skills-generic
+    - skills-ml
     - kickoffs
     - model-policy
     - harness-min

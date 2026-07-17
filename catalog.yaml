@@ -1,7 +1,7 @@
 # tz-forge catalog — composable modules, project kinds, assistant profiles
 # Design: plans/fractal/P27_DEVTOOLING_TEMPLATES.md
 # AI surface: plans/evidence/P27-devtooling/AI_ASSISTANT_COMPOSABLE.md
-# Inventory: plans/evidence/P27-devtooling/EXTRACT_CANDIDATES.md
+# Operator: plans/evidence/P27-devtooling/OPERATOR_PROFILE.md
 
 version: 1
 name: tz-forge
@@ -23,7 +23,7 @@ assistant_profiles:
     solo_ai: true
     fractal_swarm: false
   fractal-swarm:
-    description: Fractal AGENTS + multi-skills + kickoffs + model policy
+    description: Fractal AGENTS + multi-skills + kickoffs + model policy + harness docs
     human: true
     solo_ai: true
     fractal_swarm: true
@@ -39,7 +39,7 @@ modules:
     path: modules/license/mit
     description: MIT LICENSE + REUSE.toml fragment
     applies: [all]
-    extract_candidate: contributing-md  # adjacent license/reuse work (P24)
+    extract_candidate: contributing-md
 
   pre-commit:
     path: modules/pre-commit
@@ -52,18 +52,94 @@ modules:
   local-ci-rust:
     path: modules/local-ci/rust
     description: scripts/check.sh for Rust (fmt, clippy -D warnings, build, test)
-    applies: [rust-lib, rust-cli, hybrid-rust-python]
+    applies: [rust-lib, rust-cli, mcp-rust, ml-rust-crate, hybrid-rust-python]
     extract_candidate: local-check-sh-rust
+    install:
+      - { src: check.sh, dest: scripts/check.sh, mode: "0755" }
+
+  local-ci-python:
+    path: modules/local-ci/python
+    description: scripts/check.sh for Python (uv/ruff/pytest)
+    applies: [python-lib, python-mcp, ml-python-hf, hybrid-rust-python]
+    extract_candidate: local-check-sh-python
     install:
       - { src: check.sh, dest: scripts/check.sh, mode: "0755" }
 
   rust-cargo-deny:
     path: modules/rust/cargo-deny
     description: Sample deny.toml (MIT/Apache/BSD/ISC/Zlib/Unicode-3.0)
-    applies: [rust-lib, rust-cli, hybrid-rust-python]
+    applies: [rust-lib, rust-cli, mcp-rust, ml-rust-crate, hybrid-rust-python]
     extract_candidate: cargo-deny-toml
     install:
       - { src: deny.toml, dest: deny.toml }
+
+  rust-toolchain:
+    path: modules/rust/toolchain
+    description: rust-toolchain.toml (stable + rustfmt + clippy)
+    applies: [rust-lib, rust-cli, mcp-rust, ml-rust-crate, hybrid-rust-python]
+    extract_candidate: rust-toolchain-toml
+    install:
+      - { src: rust-toolchain.toml, dest: rust-toolchain.toml }
+
+  dependabot-cargo:
+    path: modules/gha/dependabot-cargo
+    description: Dependabot for cargo + github-actions
+    applies: [rust-lib, rust-cli, mcp-rust, ml-rust-crate, hybrid-rust-python]
+    extract_candidate: dependabot-cargo-gha
+
+  dependabot-python:
+    path: modules/gha/dependabot-python
+    description: Dependabot for pip + github-actions
+    applies: [python-lib, python-mcp, ml-python-hf]
+    extract_candidate: dependabot-python-gha
+
+  gitleaks-config:
+    path: modules/gha/gitleaks-config
+    description: .gitleaks.toml fragment
+    applies: [all]
+    extract_candidate: gitleaks-config
+    install:
+      - { src: .gitleaks.toml, dest: .gitleaks.toml }
+
+  gitignore-rust:
+    path: modules/git
+    description: Rust .gitignore fragment
+    applies: [rust-lib, rust-cli, mcp-rust, ml-rust-crate, hybrid-rust-python]
+    extract_candidate: gitignore-language
+    install:
+      - { src: gitignore-rust, dest: .gitignore, merge: append }
+
+  gitignore-python:
+    path: modules/git
+    description: Python .gitignore fragment
+    applies: [python-lib, python-mcp, ml-python-hf, hybrid-rust-python]
+    extract_candidate: gitignore-language
+    install:
+      - { src: gitignore-python, dest: .gitignore, merge: append }
+
+  gitignore-ml:
+    path: modules/git
+    description: ML artifacts .gitignore fragment
+    applies: [ml-rust-crate, ml-python-hf]
+    extract_candidate: gitignore-language
+    install:
+      - { src: gitignore-ml, dest: .gitignore, merge: append }
+
+  devcontainer-rust:
+    path: modules/devcontainer/rust
+    description: Devcontainer for Rust
+    applies: [rust-lib, rust-cli, mcp-rust, ml-rust-crate]
+    extract_candidate: devcontainer-json
+    install:
+      - { src: devcontainer.json, dest: .devcontainer/devcontainer.json }
+
+  devcontainer-python:
+    path: modules/devcontainer/python-uv
+    description: Devcontainer for Python + uv
+    applies: [python-lib, python-mcp, ml-python-hf]
+    extract_candidate: devcontainer-json
+    install:
+      - { src: devcontainer.json, dest: .devcontainer/devcontainer.json }
 
   agents-md-lite:
     path: modules/agents/agents-md-lite
@@ -97,6 +173,15 @@ modules:
       src: .
       dest: skills
 
+  skills-ml:
+    path: modules/agents/skills-ml
+    description: ML skills (hf-model-card, train-smoke)
+    profiles: [solo-ai-rich, fractal-swarm]
+    applies: [ml-rust-crate, ml-python-hf]
+    install_dir:
+      src: .
+      dest: skills
+
   kickoffs:
     path: modules/agents/kickoffs
     description: .claude/kickoffs README + wave conventions
@@ -111,32 +196,88 @@ modules:
     install:
       - { src: model-policy.md, dest: docs/MODEL_POLICY.md }
 
+  harness-min:
+    path: modules/agents/harness-min
+    description: agent-harness compose-by-ref docs
+    profiles: [fractal-swarm]
+    install:
+      - { src: COMPOSE.md, dest: docs/compose/agent-harness.md }
+
+  cabal-profile:
+    path: modules/agents/cabal-profile
+    description: cabal-devmelopner compose-by-ref docs
+    profiles: [fractal-swarm]
+    install:
+      - { src: COMPOSE.md, dest: docs/compose/cabal-devmelopner.md }
+
+  security-mcp-opt:
+    path: modules/agents/security-mcp-opt
+    description: Optional security-mcp compose docs
+    profiles: [fractal-swarm]
+    install:
+      - { src: COMPOSE.md, dest: docs/compose/security-mcp.md }
+
+  skeleton:
+    path: modules/skeletons
+    description: Kind-specific code skeleton (Cargo.toml / pyproject / src)
+    applies: [all]
+
 project_kinds:
   rust-lib:
     description: Library crate + tests + fleet
     path: project-kinds/rust-lib.yaml
     default_assistant: solo-ai
-    modules: [fleet, license-mit, pre-commit, local-ci-rust, rust-cargo-deny]
-
+    skeleton: modules/skeletons/rust-lib
+  rust-cli:
+    description: CLI crate + fleet
+    path: project-kinds/rust-cli.yaml
+    default_assistant: solo-ai
+    skeleton: modules/skeletons/rust-cli
+  python-lib:
+    description: Python library + fleet
+    path: project-kinds/python-lib.yaml
+    default_assistant: solo-ai
+    skeleton: modules/skeletons/python-lib
   python-mcp:
     description: Python MCP server + fleet
     path: project-kinds/python-mcp.yaml
     default_assistant: solo-ai
-    modules: [fleet, license-mit, pre-commit]
-
+    skeleton: modules/skeletons/python-mcp
   agent-swarm:
     description: Multi-agent swarm workspace
     path: project-kinds/agent-swarm.yaml
     default_assistant: fractal-swarm
-    modules: [fleet, license-mit, pre-commit]
+    skeleton: modules/skeletons/agent-swarm
+  ml-rust-crate:
+    description: ML Rust train/infer crate
+    path: project-kinds/ml-rust-crate.yaml
+    default_assistant: fractal-swarm
+    skeleton: modules/skeletons/ml-rust-crate
+  ml-python-hf:
+    description: HF Python train + model card
+    path: project-kinds/ml-python-hf.yaml
+    default_assistant: fractal-swarm
+    skeleton: modules/skeletons/ml-python-hf
+  mcp-rust:
+    description: Rust MCP server
+    path: project-kinds/mcp-rust.yaml
+    default_assistant: solo-ai
+    skeleton: modules/skeletons/mcp-rust
+  hybrid-rust-python:
+    description: PyO3 dual-stack
+    path: project-kinds/hybrid-rust-python.yaml
+    default_assistant: solo-ai
+    skeleton: modules/skeletons/hybrid-rust-python
+  infra-ops:
+    description: Infra/ops scripts + fleet
+    path: project-kinds/infra-ops.yaml
+    default_assistant: humans-only
+    skeleton: modules/skeletons/infra-ops
 
-# Top extract candidates tracked for future modules (P27c+)
 extract_backlog:
-  - gitignore-language
-  - ci-workflow-manual-local-first
-  - release-workflow-manual
-  - gitleaks-config
-  - dependabot-cargo-gha
-  - devcontainer-json
   - codeowners-default
-  - rust-toolchain-toml
+  - release-workflow-manual
+  - ci-workflow-manual-local-first
+  - copilot-instructions-optin
+  - cursor-rules-optin
+  - claude-dot-dir-commands

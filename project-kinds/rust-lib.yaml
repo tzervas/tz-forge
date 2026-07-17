@@ -2,6 +2,7 @@
 id: rust-lib
 description: Library crate + tests + fleet CI + cargo-deny + optional AI profiles
 default_assistant: solo-ai
+skeleton: modules/skeletons/rust-lib
 
 modules:
   always:
@@ -10,6 +11,11 @@ modules:
     - pre-commit
     - local-ci-rust
     - rust-cargo-deny
+    - rust-toolchain
+    - gitignore-rust
+    - dependabot-cargo
+    - gitleaks-config
+    - skeleton
 
 assistant_profiles:
   humans-only: []

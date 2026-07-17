@@ -1,0 +1,12 @@
+# tz-forge gitleaks config fragment
+title = "tz-forge gitleaks"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Benign placeholders in templates"
+paths = [
+  '''modules/skeletons/''',
+  '''\.tz-forge\.yaml$''',
+]

@@ -1,0 +1,26 @@
+# {{project}} — agent swarm compose pointers (docs-only; no full runtime)
+# Real products are referenced, not vendored.
+
+project: {{project}}
+kind: agent-swarm
+
+compose:
+  harness:
+    repo: https://github.com/tzervas/agent-harness
+    notes: "uv sync && agent-harness doctor; offline dry-run first"
+  cabal:
+    repo: https://github.com/tzervas/cabal-devmelopner
+    notes: "./setup.sh; default branch often dev; tero-first AGENTS"
+  security_mcp:
+    repo: https://github.com/tzervas/security-mcp
+    optional: true
+    notes: "cargo build; security-mcp --stdio; opt-in .mcp.json"
+  tero:
+    repo: https://github.com/tzervas/tero-mcp
+    optional: true
+
+policy:
+  copilot_auto_review: false
+  issue_keywords:
+    feature: Refs
+    main: Closes

@@ -1,17 +1,14 @@
-# Project kind: Python MCP server
-id: python-mcp
-description: Python MCP / uv project + fleet CI + pre-commit + optional AI profiles
-default_assistant: solo-ai
-skeleton: modules/skeletons/python-mcp
+# Project kind: infra / ops scripts
+id: infra-ops
+description: Install/runner/ops scripts + fleet only (humans-only default)
+default_assistant: humans-only
+skeleton: modules/skeletons/infra-ops
 
 modules:
   always:
     - fleet
     - license-mit
     - pre-commit
-    - local-ci-python
-    - gitignore-python
-    - dependabot-python
     - gitleaks-config
     - skeleton
 
@@ -31,4 +28,3 @@ assistant_profiles:
     - skills-generic
     - kickoffs
     - model-policy
-    - harness-min

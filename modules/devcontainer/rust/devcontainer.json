@@ -1,0 +1,8 @@
+{
+  "name": "tz-forge rust",
+  "image": "mcr.microsoft.com/devcontainers/rust:1-1-bookworm",
+  "postCreateCommand": "rustc --version && cargo --version",
+  "customizations": {
+    "vscode": { "extensions": ["rust-lang.rust-analyzer", "tamasfe.even-better-toml"] }
+  }
+}

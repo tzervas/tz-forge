@@ -1,0 +1,8 @@
+{
+  "name": "tz-forge python-uv",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+  "postCreateCommand": "curl -LsSf https://astral.sh/uv/install.sh | sh",
+  "customizations": {
+    "vscode": { "extensions": ["charliermarsh.ruff", "ms-python.python"] }
+  }
+}

@@ -1,0 +1,8 @@
+/target/
+**/*.rs.bk
+Cargo.lock
+# Keep lockfile for bins/clis if desired — consumers may force-add
+*.pdb
+.idea/
+.vscode/
+*.swp

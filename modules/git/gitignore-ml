@@ -1,0 +1,13 @@
+# ML artifacts — never commit large weights by default
+wandb/
+runs/
+checkpoints/
+outputs/
+*.pt
+*.pth
+*.bin
+*.onnx
+*.safetensors
+.cache/huggingface/
+lightning_logs/
+mlruns/

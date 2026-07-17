@@ -1,8 +1,8 @@
-# Project kind: Python MCP server
-id: python-mcp
-description: Python MCP / uv project + fleet CI + pre-commit + optional AI profiles
-default_assistant: solo-ai
-skeleton: modules/skeletons/python-mcp
+# Project kind: Hugging Face Python ML project
+id: ml-python-hf
+description: HF transformers train scripts + model card stub + fractal defaults
+default_assistant: fractal-swarm
+skeleton: modules/skeletons/ml-python-hf
 
 modules:
   always:
@@ -11,6 +11,7 @@ modules:
     - pre-commit
     - local-ci-python
     - gitignore-python
+    - gitignore-ml
     - dependabot-python
     - gitleaks-config
     - skeleton
@@ -24,11 +25,12 @@ assistant_profiles:
     - agents-md-lite
     - claude-md-lite
     - skills-generic
+    - skills-ml
     - kickoffs
   fractal-swarm:
     - agents-md-fractal
     - claude-md-lite
     - skills-generic
+    - skills-ml
     - kickoffs
     - model-policy
-    - harness-min

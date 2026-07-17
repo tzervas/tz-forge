@@ -2,12 +2,15 @@
 id: agent-swarm
 description: Agent swarm workspace with fleet + fractal assistant defaults
 default_assistant: fractal-swarm
+skeleton: modules/skeletons/agent-swarm
 
 modules:
   always:
     - fleet
     - license-mit
     - pre-commit
+    - gitleaks-config
+    - skeleton
 
 assistant_profiles:
   humans-only: []
@@ -25,3 +28,6 @@ assistant_profiles:
     - skills-generic
     - kickoffs
     - model-policy
+    - harness-min
+    - cabal-profile
+    - security-mcp-opt

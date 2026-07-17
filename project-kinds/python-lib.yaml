@@ -1,8 +1,8 @@
-# Project kind: Python MCP server
-id: python-mcp
-description: Python MCP / uv project + fleet CI + pre-commit + optional AI profiles
+# Project kind: Python library
+id: python-lib
+description: Python library (uv/hatch) + fleet + ruff/pytest local-ci
 default_assistant: solo-ai
-skeleton: modules/skeletons/python-mcp
+skeleton: modules/skeletons/python-lib
 
 modules:
   always:
@@ -31,4 +31,3 @@ assistant_profiles:
     - skills-generic
     - kickoffs
     - model-policy
-    - harness-min

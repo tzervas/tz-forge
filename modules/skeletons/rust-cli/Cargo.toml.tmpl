@@ -1,0 +1,17 @@
+[package]
+name = "{{project}}"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "{{description}}"
+repository = "https://github.com/tzervas/{{project}}"
+readme = "README.md"
+
+[[bin]]
+name = "{{project}}"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]

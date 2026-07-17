@@ -1,0 +1,19 @@
+[package]
+name = "{{project}}"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "{{description}}"
+repository = "https://github.com/tzervas/{{project}}"
+readme = "README.md"
+keywords = ["mcp", "agent"]
+
+[[bin]]
+name = "{{project}}"
+path = "src/main.rs"
+
+[dependencies]
+# Wire rmcp / mcp-sdk as product requires.
+# Donor: https://github.com/tzervas/security-mcp
+
+[dev-dependencies]

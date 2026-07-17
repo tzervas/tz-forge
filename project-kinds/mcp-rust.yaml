@@ -1,17 +1,19 @@
-# Project kind: Python MCP server
-id: python-mcp
-description: Python MCP / uv project + fleet CI + pre-commit + optional AI profiles
+# Project kind: Rust MCP server
+id: mcp-rust
+description: Rust MCP server (security-mcp class) + fleet + cargo-deny
 default_assistant: solo-ai
-skeleton: modules/skeletons/python-mcp
+skeleton: modules/skeletons/mcp-rust
 
 modules:
   always:
     - fleet
     - license-mit
     - pre-commit
-    - local-ci-python
-    - gitignore-python
-    - dependabot-python
+    - local-ci-rust
+    - rust-cargo-deny
+    - rust-toolchain
+    - gitignore-rust
+    - dependabot-cargo
     - gitleaks-config
     - skeleton
 
@@ -31,4 +33,4 @@ assistant_profiles:
     - skills-generic
     - kickoffs
     - model-policy
-    - harness-min
+    - security-mcp-opt
